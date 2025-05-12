@@ -401,10 +401,13 @@ print("After:", df_cleaned.shape)
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\ikinci bolum :Said Abou Allail\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 # ======================== İkinci Bölüm: İstatistiksel Hesaplamalar ve Görselleştirmeler ========================
 
-# Sayısal değişkenleri liste halinde tanımladım
+# 1) Sayısal değişkenleri liste halinde tanımladım
+# (Yani bu değişkenlerin sayısal değerleri var ve bunlara istatistik uygulayabiliriz)
 num_cols = ["Age", "CGPA", "Academic Pressure", "Study Satisfaction", "Work/Study Hours", "Financial Stress"]
 
-# Her sayısal sütun için describe() fonksiyonuyla özet istatistikleri yazdırıyorum
+# 2) Her sayısal sütun için describe() fonksiyonuyla özet istatistikleri yazdırıyorum
+# (Bu fonksiyon bize count, mean, std, min, max gibi temel bilgileri verir)
+
 print("\n=== CGPA İstatistikleri ===")
 print(df_cleaned["CGPA"].describe())
 
@@ -423,27 +426,34 @@ print(df_cleaned["Work/Study Hours"].describe())
 print("\n=== Financial Stress İstatistikleri ===")
 print(df_cleaned["Financial Stress"].describe())
 
-# Sayısal değişkenler için hem histogram hem de boxplot grafiklerini yan yana çizdiriyorum
+
+# 3) Şimdi bu sayısal değişkenler için hem histogram hem de boxplot çiziyorum
+# (Histogram bize dağılımı gösterir, Boxplot ise ortanca ve aykırı değerleri gösterir)
+
 for col in num_cols:
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))
-    sns.histplot(df_cleaned[col], kde=True, ax=ax1, color='skyblue')
-    sns.boxplot(x=df_cleaned[col], ax=ax2, color='lightblue')
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 4))  # Yan yana 2 grafik çizeceğiz
+    sns.histplot(df_cleaned[col], kde=True, ax=ax1, color='skyblue')  # Histogram + dağılım çizgisi
+    sns.boxplot(x=df_cleaned[col], ax=ax2, color='lightblue')  # Boxplot çiziyoruz
     ax1.set_title(f"{col} Histogram")
     ax2.set_title(f"{col} Boxplot")
-    plt.tight_layout()
+    plt.tight_layout()  # Grafikler arası boşlukları otomatik ayarla
     plt.show()
 
-# Kategorik değişkenler için grafik çizdiriyorum
-# Cinsiyet dağılımını gösteren grafik
+
+# 4) Kategorik değişkenler için grafik çizdiriyorum
+
+# -- Cinsiyet dağılımını gösteren grafik
 plt.figure(figsize=(6,4))
-sns.countplot(x="Gender", data=df_cleaned, palette="Set2")
-plt.xticks([0, 1], ['Male', 'Female'])
+sns.countplot(x="Gender", data=df_cleaned, palette="Set2")  # Gender sütunundaki kişi sayısını sayıyoruz
+plt.xticks([0, 1], ['Male', 'Female'])  # 0 ve 1 değerlerini etikete çeviriyoruz
 plt.title("Cinsiyete Göre Öğrenci Dağılımı")
 plt.xlabel("Cinsiyet")
 plt.ylabel("Öğrenci Sayısı")
 plt.show()
 
-# En çok temsil edilen ilk 10 şehri gösteriyorum
+
+# -- En çok temsil edilen ilk 10 şehri gösteriyorum
+# (Bize en yoğun hangi şehirlerden veri geldiğini gösterir)
 top_cities = df_cleaned["City"].value_counts().head(10)
 plt.figure(figsize=(10,6))
 sns.barplot(x=top_cities.values, y=top_cities.index, palette="viridis")
@@ -452,17 +462,19 @@ plt.xlabel("Öğrenci Sayısı")
 plt.ylabel("Şehir")
 plt.show()
 
-# Uyku süresi dağılım grafiğini çiziyorum
+
+# -- Uyku süresi dağılım grafiğini çiziyorum
 plt.figure(figsize=(8,5))
 sns.countplot(x="Sleep Duration", data=df_cleaned, palette="Blues")
-plt.xticks(ticks=[0,1,2,3], labels=['<5h', '5-6h', '7-8h', '>8h'])
+plt.xticks(ticks=[0,1,2,3], labels=['<5h', '5-6h', '7-8h', '>8h'])  # 0-3 arası sayıları etikete çeviriyoruz
 plt.title("Uyku Süresi Dağılımı")
 plt.xlabel("Uyku Süresi")
 plt.ylabel("Öğrenci Sayısı")
 plt.grid(True)
 plt.show()
 
-# Beslenme alışkanlıkları dağılımını gösteren grafik
+
+# -- Beslenme alışkanlıkları dağılımını gösteren grafik
 plt.figure(figsize=(7,5))
 sns.countplot(x="Dietary Habits", data=df_cleaned, palette="Greens")
 plt.xticks(ticks=[0,1,2], labels=['Unhealthy', 'Moderate', 'Healthy'])
@@ -472,7 +484,8 @@ plt.ylabel("Öğrenci Sayısı")
 plt.grid(True)
 plt.show()
 
-# Eğitim derecesine göre öğrenci dağılımını çizdiriyorum
+
+# -- Eğitim derecesine göre öğrenci dağılımını çiziyorum
 plt.figure(figsize=(7,5))
 sns.countplot(x="Degree", data=df_cleaned, order=df_cleaned["Degree"].value_counts().index, palette="pastel")
 plt.title("Öğrenci Dağılımı (Derecelere Göre)")
@@ -481,7 +494,8 @@ plt.ylabel("Öğrenci Sayısı")
 plt.grid(True)
 plt.show()
 
-# İntihar düşüncesi dağılımını ve yüzdesini gösteriyorum
+
+# -- İntihar düşüncesi dağılımını ve yüzdesini gösteriyorum
 plt.figure(figsize=(6,4))
 sns.countplot(x="Have you ever had suicidal thoughts ?", data=df_cleaned, palette="Reds")
 plt.xticks([0, 1], ['No', 'Yes'])
@@ -490,10 +504,13 @@ plt.xlabel("İntihar Düşüncesi")
 plt.ylabel("Öğrenci Sayısı")
 plt.grid(True)
 plt.show()
+
+# "Yes" oranını yüzde olarak yazdırıyorum
 percentage_yes = (df_cleaned["Have you ever had suicidal thoughts ?"].value_counts().loc[1] / df_cleaned["Have you ever had suicidal thoughts ?"].value_counts().sum()) * 100
 print(f"Yüzde olarak 'Evet' diyen öğrenciler: {percentage_yes:.2f}%")
 
-# Ailede ruhsal hastalık geçmişini gösteren grafik
+
+# -- Ailede ruhsal hastalık geçmişini gösteren grafik
 plt.figure(figsize=(6,4))
 sns.countplot(x="Family History of Mental Illness", data=df_cleaned, palette="coolwarm")
 plt.xticks([0, 1], ['No', 'Yes'])
@@ -502,10 +519,13 @@ plt.xlabel("Geçmiş")
 plt.ylabel("Öğrenci Sayısı")
 plt.grid(True)
 plt.show()
+
+# Yüzde hesabı
 percentage_yes = (df_cleaned["Family History of Mental Illness"].value_counts().loc[1] / df_cleaned["Family History of Mental Illness"].value_counts().sum()) * 100
 print(f"%{percentage_yes:.2f} öğrencinin ailesinde ruhsal hastalık geçmişi var.")
 
-# Depresyon durumunu gösteren grafik
+
+# -- Depresyon durumunu gösteren grafik
 plt.figure(figsize=(6,4))
 sns.countplot(x="Depression", data=df_cleaned, palette="magma")
 plt.xticks([0,1], ['No', 'Yes'])
@@ -514,22 +534,42 @@ plt.xlabel("Depresyon")
 plt.ylabel("Öğrenci Sayısı")
 plt.grid(True)
 plt.show()
+
+# Yüzde hesabı
 percentage_depressed = (df_cleaned["Depression"].value_counts().loc[1.0] / df_cleaned["Depression"].value_counts().sum()) * 100
 print(f"Depresyonda olduğunu belirten öğrencilerin oranı: %{percentage_depressed:.2f}")
 
-# Nihai istatistiksel özet: describe() çıktısını ve gelişmiş istatistikleri birleştiriyorum
+
+# 5) # Nihai istatistiksel özet: describe() çıktısını ve gelişmiş istatistikleri birleştiriyorum
+
+# a) Önce describe() fonksiyonunu kullanarak temel istatistikleri (count, mean, std, min, %25, %50, %75, max) hesaplıyoruz
+# Bu verinin genel dağılımını anlamak için kullanılır
 summary_df = df_cleaned[num_cols].describe()
+
+# b)  Şimdi daha gelişmiş istatistikleri (varyans, çarpıklık, basıklık ve aralık) hesaplıyoruz
+# Bunlar biraz daha ileri seviye özetler ama anlaması kolay:
+# - variance: verilerin yayılımını gösterir
+# - skewness: verinin simetrik mi yoksa sağa/sola kayık mı olduğunu gösterir
+# - kurtosis: verinin tepe noktası sivri mi basık mı onu gösterir
+# - range: max - min aralığını gösterir
 advanced_stats = pd.DataFrame({
     col: {
         "variance": df_cleaned[col].var(),
-        "skewness": df_cleaned[col].skew(),
-        "kurtosis": df_cleaned[col].kurt(),
-        "range": df_cleaned[col].max() - df_cleaned[col].min()
+        "skewness (çarpıklık)": df_cleaned[col].skew(),
+        "kurtosis (basıklık)": df_cleaned[col].kurt(),
+        "range (aralık)": df_cleaned[col].max() - df_cleaned[col].min()
     } for col in num_cols
 })
-final_summary = pd.concat([summary_df, advanced_stats])
-print("\n=== Nihai İstatistiksel Özet ===")
-print(final_summary.T)
+
+# c)  Önce sadece basit describe() çıktısını yazdıralım.
+print("\n=== Basit İstatistiksel Özet (describe() çıktısı) ===")
+basic_summary = summary_df.T  # .T : satırları sütun yapar, daha okunaklı gösterir
+#print(basic_summary)
+
+# d)  Şimdi nihai (gelişmiş) özeti yazdıralım. Böylece öğrenci farkı görebilir.
+print("\n=== Nihai İstatistiksel Özet (describe() + gelişmiş) ===")
+final_summary = pd.concat([summary_df, advanced_stats]).T
+#print(final_summary)
 
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\üçüncü bölüm : Beyan Srouji\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 
@@ -847,5 +887,3 @@ for col in columns_to_analyze:
     ratios = ratios.astype(str) + " %"
     print(ratios.to_string())
 
-
-    
